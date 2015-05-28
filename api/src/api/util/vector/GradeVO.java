@@ -32,7 +32,7 @@ public class GradeVO {
 	@Override
 	public String toString() {
 		return "성적표 [학번=" + hak + ", 이름=" + name + ", 국어=" + kor
-				+ ", 영어=" + eng + ", 수학=" + math + "]";
+				+ ", 영어=" + eng + ", 수학=" + math + ", 총점=" + getTotal() + "]";
 	}
 
 	public String getHak() {
