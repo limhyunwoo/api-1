@@ -60,52 +60,40 @@ public class GradeServiceImpl implements GradeService{
 	 */
 	@Override
 	public void descGradeTotal() {
-		ascGradeTotal();
-		Collections.reverse(grades);
+		Collections.sort(grades, getAnonymousComparator(false));
 	}
 	
-	// Collections.sort()의 comparator 제조기
-	private Comparator<GradeVO> getAnonymousComparator(final boolean asc){
-		return new Comparator<GradeVO>() {
-			@Override
-			public int compare(GradeVO vo1, GradeVO vo2) {
-				
-				int result = (asc)? 1 : -1;
-				
-				if(vo1.getTotal() > vo2.getTotal())
-					return result;
-					
-				return 0;
-			}
-		};
-	}
-
 	/*
 	 * 종합점수 기준으로 오름차순으로 정렬시키는 메소드
 	 */
 	@Override
 	public void ascGradeTotal() {
-		/*Collections.sort(
-				grades, 
-				//getAnonymousComparator(true)
-		);*/
-		
-		Collections.sort(
-				grades, 
-				//getAnonymousComparator(false)
+		Collections.sort(grades, getAnonymousComparator(true));
+	}
+	
+	// Collections.sort()의 파라미터인 comparator 콜백 제조기
+	private Comparator<GradeVO> getAnonymousComparator(final boolean asc){
+		return new Comparator<GradeVO>() {
+			@Override
+			public int compare(GradeVO vo1, GradeVO vo2) {
+				// 반환값 : 음수(첫 번째 값이 작으면), 0(두 비교값이 같으면), 양수(첫 번째 값이 크면)
 				
-				new Comparator<GradeVO>() {
-					@Override
-					public int compare(GradeVO vo1, GradeVO vo2) {
-						if(vo1.getTotal() < vo2.getTotal())
-							return -1;
-						else if(vo1.getTotal() > vo2.getTotal())
-							return 1;
-						else
-							return 0;
-					}
-				}
-		);
+				int result = (asc)? 1 : -1;
+				
+				if(vo1.getTotal() > vo2.getTotal())
+					// 오름차순일 경우, 정렬 전 첫 번째 값이 더 크면 1을 줘서 변경신호를 탬플릿에 보냄
+					// 내림차순일 경우, 정렬 전 첫 번째 값이 더 크면 -1을 줘서 변경을 안하겠다는 신호를 보냄
+					return result; 
+				
+				else if(vo1.getTotal() < vo2.getTotal())
+					// 오름차순일 경우, 정렬 전 첫 번째 값이 작으면 -1을 줘서 변경을 안하겠다는 신호를 탬플릿에 보냄
+					// 내림차순일 경우, 정렬 전 첫 번째 값이 작으면 1을 줘서 변경신호를 탬플릿에 보냄
+					return result * -1; 
+				
+					
+				return 0; 
+			}
+		};
 	}
 
 	

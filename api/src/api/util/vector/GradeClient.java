@@ -3,6 +3,7 @@ package api.util.vector;
 import java.util.Vector;
 
 public class GradeClient {
+	
 	public static void main(String[] args) {
 		GradeVO vo1 = new GradeVO();
 		vo1.setHak("201113002");
